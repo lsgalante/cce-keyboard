@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Keyboard
+Comment=On-screen keyboard
+Exec=cce-keyboard toggle
+Icon=cce-keyboard
+Categories=Utility;Accessibility;
+Keywords=osk;onscreen;virtual;keyboard;
+Terminal=false
+StartupNotify=false
