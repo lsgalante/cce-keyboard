@@ -191,7 +191,9 @@ pub fn all_codes(rows: &[Vec<KeyDef>]) -> Vec<u32> {
 }
 
 /// A key that is not a character: the name it wears, or the bundled
-/// cce-icons glyph standing in for it (with the name as the fallback).
+/// cce-icons glyph standing in for it (with the name as the fallback —
+/// always a word, never a symbol character, since the fallback only shows
+/// when the icon set is missing).
 pub fn fixed_label(action: Action) -> Option<(&'static str, Option<&'static str>)> {
     use code::*;
     let named = |name| Some((name, None));
@@ -206,10 +208,10 @@ pub fn fixed_label(action: Action) -> Option<(&'static str, Option<&'static str>
             TAB => named("Tab"),
             ENTER => named("Enter"),
             SPACE => named(""),
-            LEFT => Some(("←", Some("arrow-left"))),
-            RIGHT => Some(("→", Some("arrow-right"))),
-            UP => Some(("↑", Some("arrow-up"))),
-            DOWN => Some(("↓", Some("arrow-down"))),
+            LEFT => Some(("Left", Some("arrow-left"))),
+            RIGHT => Some(("Right", Some("arrow-right"))),
+            UP => Some(("Up", Some("arrow-up"))),
+            DOWN => Some(("Down", Some("arrow-down"))),
             HOME => named("Home"),
             END => named("End"),
             PAGEUP => named("PgUp"),
