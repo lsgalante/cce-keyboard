@@ -37,6 +37,15 @@ first; this file covers only what is particular to this crate.
   ladder's `control_gap()`: the ladder spaces rows of buttons, and on a
   dense grid its gap ate a third of every key.
 
+## Shown by a touched field
+
+The compositor runs `cce-keyboard show` when a touch activates a
+text-input-v3 field and `cce-keyboard hide` when that field lets go
+(`cce-compositor`'s `osk.rs`; `window_manager { osk_on_touch }`). cce-ui
+widgets announce their fields through `cce_ui::text_input::claim`. The board
+does not have to do anything for this: it stays a virtual keyboard, and a
+tap on it does not take focus, so the field stays enabled while it types.
+
 ## Depends on a compositor fix
 
 A click on a layer surface used to give it keyboard focus whatever its
