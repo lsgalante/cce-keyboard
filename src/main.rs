@@ -31,7 +31,7 @@ use std::sync::Mutex;
 
 use cce_ui::colors::{button_background_color, button_hover_color, button_press_color, control_label_color_u8};
 use cce_ui::engine::{
-    Application, EngineState, LayerAnchor, LayerKeyboardInteractivity, LayerKind, LayerSettings, LogicalPosition,
+    Application, LayerAnchor, LayerKeyboardInteractivity, LayerKind, LayerSettings, LogicalPosition,
     LogicalSize, WindowSettings,
 };
 use cce_ui::layout::{button_corner_radius, button_font, button_height, control_gap, parse_font_string, root_plate_inset};
@@ -39,7 +39,6 @@ use cce_ui::scene::layout::Rect;
 use cce_ui::scene::paint::{AlignH, AlignV, ControlPlate, DisplayList, PaintCtx, PlateStance, TextAttrs, TextLayout};
 use cce_ui::scene::Material;
 use cce_ui::widget::{ElementState, KeyEvent, MouseButton, MouseScrollDelta};
-use wayland_client::QueueHandle;
 
 use keymap::Keymap;
 use layout::{Action, KeyDef, KeyRect, Modifier};
@@ -325,7 +324,9 @@ impl KeyboardApp {
 impl Application for KeyboardApp {
     type Message = Message;
 
-    fn new(_qh: &QueueHandle<EngineState<Self>>, sender: calloop::channel::Sender<Self::Message>) -> Self {
+    fn create(sender: cce_ui::engine::AppSender<Self::Message>) -> Self {
+        // The app keeps calloop's sender; `AppSender` converts into it.
+        let sender: calloop::channel::Sender<Self::Message> = sender.into();
         let (keymap, vk) = PARKED
             .lock()
             .unwrap_or_else(|e| e.into_inner())
