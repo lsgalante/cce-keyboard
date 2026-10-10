@@ -29,7 +29,7 @@ mod vkbd;
 
 use std::sync::Mutex;
 
-use cce_ui::colors::{button_background_color, button_hover_color, button_press_color, control_label_color_u8};
+use cce_ui::color::{button_background_color, button_hover_color, button_press_color, control_label_color_u8};
 use cce_ui::engine::{
     Application, LayerAnchor, LayerKeyboardInteractivity, LayerKind, LayerSettings, LogicalPosition,
     LogicalSize, WindowSettings,
