@@ -324,6 +324,10 @@ impl KeyboardApp {
 impl Application for KeyboardApp {
     type Message = Message;
 
+    fn layer_app(&mut self) -> Option<&mut dyn cce_ui::engine::LayerApp> {
+        Some(self)
+    }
+
     fn create(sender: cce_ui::engine::AppSender<Self::Message>) -> Self {
         // The app keeps calloop's sender; `AppSender` converts into it.
         let sender: calloop::channel::Sender<Self::Message> = sender.into();
@@ -367,24 +371,6 @@ impl Application for KeyboardApp {
             fullscreen: false,
             min_size: None,
         }
-    }
-
-    fn layer(&self) -> Option<LayerSettings> {
-        let anchor = if self.config.width == 0 {
-            LayerAnchor::BOTTOM | LayerAnchor::LEFT | LayerAnchor::RIGHT
-        } else {
-            LayerAnchor::BOTTOM
-        };
-        Some(LayerSettings {
-            // Overlay, so the board also stands over a fullscreen window.
-            layer: LayerKind::Overlay,
-            anchor,
-            exclusive_zone: if self.config.reserve { self.config.height as i32 } else { 0 },
-            // Never take focus: the window being typed into must keep it.
-            keyboard_interactivity: LayerKeyboardInteractivity::None,
-            margin: (0, 0, self.config.margin, 0),
-            namespace: SOCKET_PREFIX.to_string(),
-        })
     }
 
     fn update(&mut self, msg: Self::Message, _needs_rebuild: &mut bool, exit: &mut bool) {
@@ -465,6 +451,26 @@ impl Application for KeyboardApp {
         // Nothing may stay pressed in the seat once the board is gone; the
         // keyboard's own Drop releases whatever this misses.
         let _ = self.release(None);
+    }
+}
+
+impl cce_ui::engine::LayerApp for KeyboardApp {
+    fn layer(&self) -> Option<LayerSettings> {
+        let anchor = if self.config.width == 0 {
+            LayerAnchor::BOTTOM | LayerAnchor::LEFT | LayerAnchor::RIGHT
+        } else {
+            LayerAnchor::BOTTOM
+        };
+        Some(LayerSettings {
+            // Overlay, so the board also stands over a fullscreen window.
+            layer: LayerKind::Overlay,
+            anchor,
+            exclusive_zone: if self.config.reserve { self.config.height as i32 } else { 0 },
+            // Never take focus: the window being typed into must keep it.
+            keyboard_interactivity: LayerKeyboardInteractivity::None,
+            margin: (0, 0, self.config.margin, 0),
+            namespace: SOCKET_PREFIX.to_string(),
+        })
     }
 }
 
